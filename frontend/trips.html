@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Saved Trips - VibeTrip Agent</title>
+  <meta name="description" content="View and manage your saved VibeTrip itineraries and personalized travel plans.">
+  
+  <link rel="stylesheet" href="css/styles.css?v=3.4">
+  <link rel="stylesheet" href="css/components.css?v=3.4">
+  <link rel="stylesheet" href="css/responsive.css?v=3.4">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo" id="navLogo">
+        <span class="brand-wordmark"><span class="wordmark-vibe">Vibe</span><span class="wordmark-trip">Trip</span></span>
+      </a>
+
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html" class="nav-link" id="navExplore">Explore</a></li>
+        <li><a href="trips.html" class="nav-link active" id="navMyTrips">My Trips</a></li>
+        <li><a href="index.html#plannerSection" class="nav-link" id="navPlan">Plan Trip</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Saved Trips Content -->
+  <main style="padding: 48px 0 80px; flex: 1;">
+    <div class="container">
+      
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; margin-bottom: 32px;">
+        <div>
+          <span class="editorial-tag">Personal Collection</span>
+          <h1 style="font-family: var(--font-serif); font-size: 2.8rem; color: var(--color-text);">My Saved Journeys</h1>
+          <p style="color: var(--color-text-muted); font-size: 1.05rem;">
+            Access and review your taste-tailored travel itineraries.
+          </p>
+        </div>
+        <a href="index.html#plannerSection" class="btn btn-primary" id="planNewTripBtn">
+          <span>+</span> Plan New Trip
+        </a>
+      </div>
+
+      <!-- Sync Status Notice -->
+      <div id="savedTripsNotice" style="margin-bottom: 24px;"></div>
+
+      <!-- Saved Trips Grid -->
+      <div class="places-grid" id="savedTripsContainer" style="grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));">
+        <!-- Rendered by saved-trips.js -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="card" style="display: none; text-align: center; padding: 64px 20px; max-width: 600px; margin: 40px auto;">
+        <div style="font-size: 3rem; margin-bottom: 16px;">🗺</div>
+        <h3 style="font-family: var(--font-serif); font-size: 1.8rem; margin-bottom: 8px;">No Saved Trips Yet</h3>
+        <p style="color: var(--color-text-muted); margin-bottom: 24px;">
+          You haven't saved any travel plans yet. Create an itinerary matching your personal vibe to get started!
+        </p>
+        <a href="index.html#plannerSection" class="btn btn-primary">
+          Plan Your First Trip <span>→</span>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-backdrop" id="deleteModal">
+    <div class="modal-box" style="text-align: center;">
+      <button class="modal-close-btn" onclick="closeModal('deleteModal')">✕</button>
+      <div style="font-size: 2.5rem; margin-bottom: 12px; color: var(--color-error);">🗑</div>
+      <h3 style="font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 8px;">Delete Itinerary?</h3>
+      <p style="color: var(--color-text-muted); margin-bottom: 24px; font-size: 0.92rem;">
+        Are you sure you want to delete <span id="deleteTripTitle" style="font-weight: 600; color: var(--color-text);"></span>? This action cannot be undone.
+      </p>
+      <div style="display: flex; gap: 12px; justify-content: center;">
+        <button class="btn btn-secondary" onclick="closeModal('deleteModal')">Cancel</button>
+        <button class="btn btn-primary" id="confirmDeleteBtn" style="background-color: var(--color-error);">Delete Permanently</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <span>© 2026 VibeTrip. Built for Qloo Hackathon.</span>
+        <a href="index.html">Return to Home</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js?v=3.4"></script>
+  <script src="js/app.js?v=3.4"></script>
+  <script src="js/saved-trips.js?v=3.4"></script>
+</body>
+</html>

@@ -1,0 +1,383 @@
+/* VibeTrip Agent - Responsive Layout Styles */
+
+/* Mobile Navigation Toggle Button */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: var(--color-text);
+  font-size: 1.5rem;
+}
+
+/* Landscape Tablet / Small Desktop (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .hero-grid {
+    gap: 40px;
+  }
+
+  .philosophy-grid, .curation-grid {
+    gap: 20px;
+  }
+
+  .philosophy-card, .curation-card {
+    padding: 28px 22px;
+  }
+}
+
+/* Tablet Screens (max-width: 992px) */
+@media (max-width: 992px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+
+  .hero-content {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .hero-kicker {
+    justify-content: center;
+  }
+
+  .hero-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-ctas {
+    justify-content: center;
+  }
+
+  .hero-meta-row {
+    justify-content: center;
+  }
+
+  .hero-visual-frame {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .philosophy-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .curation-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .pace-selector {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile Screens (max-width: 768px) */
+@media (max-width: 768px) {
+  :root {
+    --nav-height: 66px;
+  }
+
+  .container {
+    padding: 0 18px;
+  }
+
+  .nav-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    background-color: var(--color-surface);
+    border-bottom: 1px solid var(--color-border);
+    flex-direction: column;
+    padding: 28px 20px;
+    gap: 20px;
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    transform: translateY(-150%);
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition);
+  }
+
+  .nav-menu.active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-link {
+    font-size: 1.05rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  .nav-cta-btn {
+    display: none; /* Accessible in the mobile nav menu */
+  }
+
+  .hero-section {
+    padding: 48px 0 44px;
+    min-height: auto;
+  }
+
+  .hero-title {
+    font-size: 2.35rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.02rem;
+    margin-bottom: 26px;
+  }
+
+  .hero-telemetry-bar {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 20px;
+    border-radius: var(--radius-lg);
+    width: 100%;
+    max-width: 380px;
+  }
+
+  .telemetry-separator {
+    width: 100%;
+    height: 1px;
+  }
+
+  .cached-trip-banner {
+    flex-direction: column;
+    text-align: center;
+    border-radius: var(--radius-lg);
+    gap: 8px;
+  }
+
+  .editorial-section {
+    padding: 60px 0;
+  }
+
+  .section-header {
+    margin-bottom: 36px;
+  }
+
+  .curation-cta-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 28px 24px;
+    gap: 18px;
+  }
+
+  .curation-cta-banner .btn {
+    width: 100%;
+  }
+
+  .form-header h2 {
+    font-size: 1.9rem;
+  }
+
+  .card {
+    padding: 24px 18px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .hero-ctas .btn {
+    width: 100%;
+  }
+
+  .places-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .trip-overview-card {
+    padding: 24px 18px;
+  }
+
+  .trip-title-area h2 {
+    font-size: 1.9rem;
+  }
+
+  .day-card {
+    padding: 20px 16px;
+  }
+
+  .timeline {
+    padding-left: 20px;
+  }
+
+  .timeline-dot {
+    left: -20px;
+  }
+
+  .loading-overlay {
+    padding: 28px 18px;
+  }
+
+  .footer-content {
+    flex-direction: column;
+  }
+
+  .footer-tech {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Small Mobile Screens (max-width: 480px) */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 14px;
+  }
+
+  .hero-title {
+    font-size: 2.1rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.96rem;
+  }
+
+  .hero-ctas {
+    width: 100%;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .hero-meta-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .hero-meta-divider {
+    display: none;
+  }
+
+  .brand-wordmark {
+    font-size: 1.35rem;
+  }
+
+  .chips-grid {
+    gap: 8px;
+  }
+
+  .chip {
+    padding: 7px 13px;
+    font-size: 0.84rem;
+  }
+}
+
+/* Very Narrow Screens (max-width: 340px) */
+@media (max-width: 340px) {
+  .brand-wordmark {
+    font-size: 1.2rem;
+  }
+
+  .hero-title {
+    font-size: 1.85rem;
+  }
+
+  .hero-kicker {
+    font-size: 0.72rem;
+  }
+}
+
+/* ==========================================================================
+   Personalization Section Responsive
+   ========================================================================== */
+@media (max-width: 768px) {
+  .personalization-card {
+    padding: 24px 18px;
+  }
+
+  .personalization-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .personalization-title {
+    font-size: 1.5rem;
+  }
+
+  .personalization-selection-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+  }
+
+  #resetPlaceSelectionsBtn {
+    align-self: flex-start;
+  }
+
+  .personalize-meta-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .quick-prompts {
+    width: 100%;
+  }
+
+  .quick-prompt-chip {
+    white-space: normal;
+  }
+
+  .personalization-actions {
+    width: 100%;
+  }
+
+  .personalization-actions .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .personalization-card {
+    padding: 18px 14px;
+    border-radius: var(--radius-lg);
+  }
+
+  .personalization-title {
+    font-size: 1.35rem;
+  }
+
+  .personalization-subtitle {
+    font-size: 0.86rem;
+  }
+
+  .personalize-textarea {
+    padding: 12px;
+    font-size: 0.88rem;
+  }
+
+  .quick-prompt-chip {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+  }
+}
+
+
+

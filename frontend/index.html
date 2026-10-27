@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VibeTrip — Curated Travel Shaped by Personal Taste</title>
+  <meta name="description" content="Discover personalized destinations and grounded day-by-day itineraries tailored to your aesthetic, cultural passions, and preferred travel rhythm.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/styles.css?v=3.4">
+  <link rel="stylesheet" href="css/components.css?v=3.4">
+  <link rel="stylesheet" href="css/responsive.css?v=3.4">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo" id="navLogo">
+        <span class="brand-wordmark"><span class="wordmark-vibe">Vibe</span><span class="wordmark-trip">Trip</span></span>
+      </a>
+
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html" class="nav-link active" id="navExplore">Explore</a></li>
+        <li><a href="#philosophySection" class="nav-link" id="navPhilosophy">Philosophy</a></li>
+        <li><a href="trips.html" class="nav-link" id="navMyTrips">My Trips</a></li>
+        <li><a href="#plannerSection" class="nav-link nav-cta-btn" id="navPlan">Plan Trip <span>↓</span></a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section — Interactive Digital Travel Map Environment -->
+  <section class="hero-section" id="heroSection">
+    <!-- Travel Route Network Background Layer -->
+    <div class="travel-network-bg" aria-hidden="true">
+      <div class="travel-grid-pattern"></div>
+      <div class="cursor-glow-layer"></div>
+      
+      <svg class="route-network-svg" viewBox="0 0 1400 600" preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="routeTealGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#42D9C8" stop-opacity="0.1" />
+            <stop offset="50%" stop-color="#42D9C8" stop-opacity="0.85" />
+            <stop offset="100%" stop-color="#6EA8FE" stop-opacity="0.1" />
+          </linearGradient>
+          <linearGradient id="routeBlueGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#6EA8FE" stop-opacity="0.1" />
+            <stop offset="50%" stop-color="#6EA8FE" stop-opacity="0.75" />
+            <stop offset="100%" stop-color="#42D9C8" stop-opacity="0.1" />
+          </linearGradient>
+        </defs>
+
+        <!-- Route Arcs -->
+        <path class="route-arc" d="M 120 420 Q 380 140 700 280 T 1280 180" />
+        <path class="route-arc-alt" d="M 180 180 Q 520 440 920 220 T 1320 440" />
+        <path class="route-arc" d="M 280 500 Q 700 300 1150 480" />
+
+        <!-- Waypoint Nodes & Pings -->
+        <g transform="translate(180, 180)">
+          <circle class="waypoint-ping" cx="0" cy="0" r="10" />
+          <circle class="waypoint-node" cx="0" cy="0" r="4.5" />
+          <text class="waypoint-label" x="10" y="-8">REYKJAVIK [64°N]</text>
+        </g>
+
+        <g transform="translate(700, 280)">
+          <circle class="waypoint-ping" cx="0" cy="0" r="14" />
+          <circle class="waypoint-node" cx="0" cy="0" r="5" />
+          <text class="waypoint-label" x="12" y="14">FLORENCE [43°N]</text>
+        </g>
+
+        <g transform="translate(920, 220)">
+          <circle class="waypoint-ping" cx="0" cy="0" r="12" />
+          <circle class="waypoint-node" cx="0" cy="0" r="4.5" />
+          <text class="waypoint-label" x="10" y="-8">JAIPUR [26°N]</text>
+        </g>
+
+        <g transform="translate(1280, 180)">
+          <circle class="waypoint-ping" cx="0" cy="0" r="16" />
+          <circle class="waypoint-node" cx="0" cy="0" r="5.5" />
+          <text class="waypoint-label" x="-85" y="-10">KYOTO [35°N]</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="container">
+      <div class="hero-content-center">
+        
+        <!-- Active Itinerary Re-use Notice (Dynamically populated) -->
+        <div class="cached-trip-banner" id="cachedTripBanner" style="display: none;">
+          <span class="cached-trip-badge">SAVED IN SESSION</span>
+          <span id="cachedTripLabel">Active itinerary available</span>
+          <button type="button" class="btn btn-sm btn-primary" id="btnViewCachedTrip">View Itinerary →</button>
+        </div>
+
+        <div class="hero-kicker">
+          <span class="hero-kicker-dot"></span>
+          <span>Intelligent Travel Planner</span>
+        </div>
+        
+        <h1 class="hero-title">
+          Map journeys shaped by <em>your personal taste</em>.
+        </h1>
+        
+        <p class="hero-subtitle">
+          Connect your cultural passions, neighborhood aesthetics, and travel rhythm with verified places—crafted into a grounded day-by-day itinerary without generic checklists.
+        </p>
+        
+        <div class="hero-ctas">
+          <a href="#plannerSection" class="btn btn-primary btn-lg" id="heroPlanCta">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+            <span>Plan My VibeTrip</span>
+          </a>
+          <a href="#philosophySection" class="btn btn-secondary btn-lg" id="heroLearnCta">
+            <span>Explore Methodology</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </a>
+        </div>
+
+        <div class="hero-telemetry-bar">
+          <div class="telemetry-item">
+            <span class="telemetry-label">DISCOVERY ENGINE</span>
+            <span class="telemetry-val">Qloo Taste Intelligence</span>
+          </div>
+          <div class="telemetry-separator"></div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">GROUNDING</span>
+            <span class="telemetry-val">Geoapify Verified Places</span>
+          </div>
+          <div class="telemetry-separator"></div>
+          <div class="telemetry-item">
+            <span class="telemetry-label">REASONING</span>
+            <span class="telemetry-val">Groq Multi-Day Synthesis</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Editorial Philosophy Section -->
+  <section class="editorial-section editorial-section-alt reveal-on-scroll" id="philosophySection">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-kicker">Curatorial Approach</span>
+        <h2 class="section-title">How VibeTrip plans differently.</h2>
+        <p class="section-subtitle">
+          Generic travel tools rank places by mass popularity. We correlate your aesthetic sensibilities with verified neighborhood spots for authentic exploration.
+        </p>
+      </div>
+
+      <div class="philosophy-grid">
+        <div class="philosophy-card">
+          <div class="card-step-num">01</div>
+          <h3>Cultural & Aesthetic Profiling</h3>
+          <p>
+            Select what inspires you—whether that is third-wave coffee roasters, brutalist architecture, quiet botanical gardens, or vinyl listening bars.
+          </p>
+        </div>
+
+        <div class="philosophy-card">
+          <div class="card-step-num">02</div>
+          <h3>Verified Geospatial Places</h3>
+          <p>
+            Every venue is grounded in real-world geospatial intelligence with authentic coordinates, street addresses, and map links—never fabricated.
+          </p>
+        </div>
+
+        <div class="philosophy-card">
+          <div class="card-step-num">03</div>
+          <h3>Human-Paced Daily Flow</h3>
+          <p>
+            Daily schedules organized into morning, afternoon, and evening blocks with realistic commute buffers, cost benchmarks, and local insider notes.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Travel Experience Archetypes Section -->
+  <section class="editorial-section reveal-on-scroll" id="curationSection">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-kicker">Experience Palettes</span>
+        <h2 class="section-title">Designed for how you love to explore.</h2>
+        <p class="section-subtitle">
+          Whether your ideal morning begins with an espresso at an artisan bakery or an unhurried museum walk, VibeTrip adapts to your tempo.
+        </p>
+      </div>
+
+      <div class="curation-grid">
+        <div class="curation-card">
+          <div class="curation-icon-box">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" x2="22" y1="22" y2="22"/><line x1="6" x2="6" y1="18"/><line x1="10" x2="10" y1="18"/><line x1="14" x2="14" y1="18"/><line x1="18" x2="18" y1="18"/><polygon points="12 2 20 7 4 7"/></svg>
+          </div>
+          <h3>The Architectural Eye</h3>
+          <p>
+            Explore historic quarters, modernist landmarks, independent galleries, and thoughtful urban design walks.
+          </p>
+          <div class="curation-tags">
+            <span class="curation-tag">Historic Heritage</span>
+            <span class="curation-tag">Architecture</span>
+            <span class="curation-tag">Galleries</span>
+          </div>
+        </div>
+
+        <div class="curation-card">
+          <div class="curation-icon-box">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h12Z"/><path d="M6 2v2"/><path d="M17 10h1a3 3 0 0 1 3 3 3 3 0 0 1-3 3h-1"/></svg>
+          </div>
+          <h3>The Culinary Wanderer</h3>
+          <p>
+            Discover neighborhood bakeries, third-wave specialty roasters, intimate evening bistros, and authentic street food.
+          </p>
+          <div class="curation-tags">
+            <span class="curation-tag">Cafes</span>
+            <span class="curation-tag">Street Food</span>
+            <span class="curation-tag">Speakeasies</span>
+          </div>
+        </div>
+
+        <div class="curation-card">
+          <div class="curation-icon-box">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+          </div>
+          <h3>The Mindful Explorer</h3>
+          <p>
+            Unwind in quiet botanical gardens, scenic coastal viewpoints, slow morning bookshops, and serene cultural shrines.
+          </p>
+          <div class="curation-tags">
+            <span class="curation-tag">Peaceful Nature</span>
+            <span class="curation-tag">Gardens</span>
+            <span class="curation-tag">Relaxed Pacing</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="curation-cta-banner">
+        <div>
+          <h4>Ready to plan your personal journey?</h4>
+          <p>Set your destination, select your vibe, and let VibeTrip assemble your day-by-day plan.</p>
+        </div>
+        <a href="#plannerSection" class="btn btn-primary btn-lg">
+          <span>Start Planning</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- Planning Form Section -->
+  <section class="planner-section" id="plannerSection">
+    <div class="container planner-container">
+      <div class="form-header">
+        <h2>Craft Your Vibe Journey</h2>
+        <p>Tell us where you want to go and what moves your soul.</p>
+      </div>
+
+      <div class="card">
+        <form id="plannerForm" novalidate>
+          
+          <!-- Destination Field -->
+          <div class="form-group">
+            <label for="destinationInput" class="form-label">
+              <span>Where do you want to travel?</span>
+              <span class="form-label-hint">City, region, or hub</span>
+            </label>
+            <input type="text" id="destinationInput" class="form-input" placeholder="e.g., Jaipur, Kyoto, Florence, Oaxaca" required>
+            <div class="form-error" id="destinationError">Please enter a valid destination city.</div>
+            
+            <div class="quick-destinations">
+              <span style="font-size: 0.8rem; color: var(--color-text-muted); align-self: center;">Popular vibes:</span>
+              <span class="quick-chip" data-dest="Jaipur, India">Jaipur, India</span>
+              <span class="quick-chip" data-dest="Kyoto, Japan">Kyoto, Japan</span>
+              <span class="quick-chip" data-dest="Florence, Italy">Florence, Italy</span>
+              <span class="quick-chip" data-dest="Reykjavik, Iceland">Reykjavik, Iceland</span>
+              <span class="quick-chip" data-dest="Oaxaca, Mexico">Oaxaca, Mexico</span>
+            </div>
+          </div>
+
+          <!-- Dates & Duration Row -->
+          <div class="form-row">
+            <div class="form-group">
+              <label for="startDateInput" class="form-label">Start Date</label>
+              <input type="date" id="startDateInput" class="form-input">
+            </div>
+
+            <div class="form-group">
+              <label for="endDateInput" class="form-label">End Date</label>
+              <input type="date" id="endDateInput" class="form-input">
+            </div>
+
+            <div class="form-group">
+              <label for="durationInput" class="form-label">
+                <span>Duration (Days)</span>
+                <span class="form-label-hint">1-30 days</span>
+              </label>
+              <input type="number" id="durationInput" class="form-input" min="1" max="30" value="3">
+            </div>
+
+            <div class="form-group">
+              <label for="travelersInput" class="form-label">Travelers</label>
+              <select id="travelersInput" class="form-input">
+                <option value="1">Solo Traveler</option>
+                <option value="2">2 Travelers (Duo)</option>
+                <option value="3">3-4 Small Group</option>
+                <option value="5">5+ Friends / Family</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Budget Row -->
+          <div class="form-row">
+            <div class="form-group" style="grid-column: span 2;">
+              <label for="budgetInput" class="form-label">
+                <span>Estimated Target Budget</span>
+                <span class="form-label-hint">Optional planning benchmark</span>
+              </label>
+              <input type="number" id="budgetInput" class="form-input" placeholder="e.g., 5000" min="0" step="50">
+            </div>
+
+            <div class="form-group">
+              <label for="currencyInput" class="form-label">Currency</label>
+              <select id="currencyInput" class="form-input">
+                <option value="USD">USD ($)</option>
+                <option value="INR">INR (₹)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="JPY">JPY (¥)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Travel Interests Multi-select Chips -->
+          <div class="form-group">
+            <label class="form-label">
+              <span>Your Cultural & Travel Interests</span>
+              <span class="form-label-hint">Select all that inspire you</span>
+            </label>
+            <div class="chips-grid" id="interestsGrid">
+              <div class="chip interest-chip active" data-val="cafes">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><path d="M10 2v2"/><path d="M14 2v2"/><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h12Z"/><path d="M6 2v2"/><path d="M17 10h1a3 3 0 0 1 3 3 3 3 0 0 1-3 3h-1"/></svg></span>
+                <span>Cafes</span>
+              </div>
+              <div class="chip interest-chip active" data-val="architecture">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><line x1="2" x2="22" y1="22" y2="22"/><line x1="6" x2="6" y1="18"/><line x1="10" x2="10" y1="18"/><line x1="14" x2="14" y1="18"/><line x1="18" x2="18" y1="18"/><polygon points="12 2 20 7 4 7"/></svg></span>
+                <span>Architecture</span>
+              </div>
+              <div class="chip interest-chip active" data-val="photography">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg></span>
+                <span>Photography</span>
+              </div>
+              <div class="chip interest-chip" data-val="art and culture">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></span>
+                <span>Art & Culture</span>
+              </div>
+              <div class="chip interest-chip" data-val="music">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M6 12c0-1.7.7-3.2 1.8-4.2"/><circle cx="12" cy="12" r="2"/><path d="M18 12c0 1.7-.7 3.2-1.8 4.2"/></svg></span>
+                <span>Music & Vinyl</span>
+              </div>
+              <div class="chip interest-chip" data-val="food">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg></span>
+                <span>Street Food & Dining</span>
+              </div>
+              <div class="chip interest-chip" data-val="nature">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span>
+                <span>Nature & Gardens</span>
+              </div>
+              <div class="chip interest-chip" data-val="history">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><path d="M22 20v-9H2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2Z"/><path d="M18 11V4H6v7"/><path d="M15 22v-4a3 3 0 0 0-6 0v4"/><path d="M22 11V9"/><path d="M2 11V9"/><path d="M6 4V2"/><path d="M18 4V2"/><path d="M10 4V2"/><path d="M14 4V2"/></svg></span>
+                <span>History & Heritage</span>
+              </div>
+              <div class="chip interest-chip" data-val="nightlife">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><path d="M8 22h8"/><path d="M12 11v11"/><path d="m19 3-7 8-7-8Z"/></svg></span>
+                <span>Speakeasies & Nightlife</span>
+              </div>
+              <div class="chip interest-chip" data-val="shopping">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
+                <span>Artisan & Vintage Markets</span>
+              </div>
+              <div class="chip interest-chip" data-val="adventure">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></span>
+                <span>Adventure</span>
+              </div>
+              <div class="chip interest-chip" data-val="local experiences">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg></span>
+                <span>Local Neighborhoods</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preferred Atmosphere Multi-select Chips -->
+          <div class="form-group">
+            <label class="form-label">
+              <span>Preferred Vibe & Atmosphere</span>
+              <span class="form-label-hint">What mood do you seek?</span>
+            </label>
+            <div class="chips-grid" id="atmosphereGrid">
+              <div class="chip atmosphere-chip active" data-val="peaceful">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg></span>
+                <span>Peaceful & Relaxing</span>
+              </div>
+              <div class="chip atmosphere-chip active" data-val="artistic">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/><path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 0 0-3-3.02z"/></svg></span>
+                <span>Artistic & Creative</span>
+              </div>
+              <div class="chip atmosphere-chip" data-val="trendy">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/><path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/></svg></span>
+                <span>Trendy & Social</span>
+              </div>
+              <div class="chip atmosphere-chip" data-val="historical">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+                <span>Historical & Cultural</span>
+              </div>
+              <div class="chip atmosphere-chip" data-val="adventurous">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg></span>
+                <span>Adventurous</span>
+              </div>
+              <div class="chip atmosphere-chip" data-val="romantic">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></span>
+                <span>Romantic & Intimate</span>
+              </div>
+              <div class="chip atmosphere-chip" data-val="offbeat">
+                <span class="chip-icon" aria-hidden="true"><svg class="chip-svg" viewBox="0 0 24 24"><path d="m10.065 12.493-6.18 1.318a.934.934 0 0 1-1.108-.702l-.537-2.15a1.07 1.07 0 0 1 .691-1.265l13.504-4.44"/><path d="m13.56 11.747 4.332-.924"/><path d="m16 21-3.105-6.21"/><path d="M16.485 5.94a2 2 0 0 1 1.455-2.425l1.09-.272a1 1 0 0 1 1.212.727l1.515 6.06a1 1 0 0 1-.727 1.213l-1.09.272a2 2 0 0 1-2.425-1.455z"/><path d="m6.158 8.633 1.114 4.456"/><path d="m8 21 3.105-6.21"/><circle cx="12" cy="13" r="2"/></svg></span>
+                <span>Offbeat & Unconventional</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Travel Pace -->
+          <div class="form-group">
+            <label class="form-label">
+              <span>Travel Pace</span>
+              <span class="form-label-hint">How full should your days be?</span>
+            </label>
+            <div class="pace-selector">
+              <div class="pace-card" data-pace="relaxed">
+                <h4>Relaxed</h4>
+                <p>Slow mornings & spacious afternoons</p>
+              </div>
+              <div class="pace-card active" data-pace="balanced">
+                <h4>Balanced</h4>
+                <p>Curated highlights with breathing room</p>
+              </div>
+              <div class="pace-card" data-pace="packed">
+                <h4>Packed</h4>
+                <p>Maximize every hour & discovery</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div style="text-align: center; margin-top: 36px;">
+            <button type="submit" class="btn btn-primary btn-lg" id="generatePlanBtn">
+              <span>⚡</span> Generate My VibeTrip Itinerary
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Multi-stage Loading Overlay -->
+      <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner-box">
+          <div class="loading-spinner-ring"></div>
+          <span style="font-size: 1.5rem;">✈</span>
+        </div>
+        <h3 class="loading-title">Synthesizing Your VibeTrip...</h3>
+        <p class="loading-subtitle">Orchestrating Qloo Taste Intelligence, Geoapify Geospatial Search, and Groq Reasoning</p>
+        
+        <div class="loading-progress-bar">
+          <div class="loading-progress-fill" id="loadingProgressFill"></div>
+        </div>
+
+        <div class="loading-steps">
+          <div class="loading-step" id="step1">
+            <span class="step-status-icon">○</span>
+            <span>1. Understanding your travel vibe & preferences</span>
+          </div>
+          <div class="loading-step" id="step2">
+            <span class="step-status-icon">○</span>
+            <span>2. Exploring Qloo cultural taste & affinity insights</span>
+          </div>
+          <div class="loading-step" id="step3">
+            <span class="step-status-icon">○</span>
+            <span>3. Discovering verified real-world places via Geoapify</span>
+          </div>
+          <div class="loading-step" id="step4">
+            <span class="step-status-icon">○</span>
+            <span>4. Grounding and reasoning itinerary with Groq</span>
+          </div>
+          <div class="loading-step" id="step5">
+            <span class="step-status-icon">○</span>
+            <span>5. Preparing your personalized travel dashboard</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Results Dashboard Section -->
+  <section class="results-section" id="resultsSection">
+    <div class="container" id="resultsContainer">
+      <!-- Dynamically filled by results.js -->
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <div class="brand-logo">
+            <span class="brand-wordmark"><span class="wordmark-vibe">Vibe</span><span class="wordmark-trip">Trip</span></span>
+          </div>
+          <p>
+            Personalized travel itineraries crafted around your destination, interests, and preferred travel atmosphere.
+          </p>
+        </div>
+
+        <div class="footer-tech">
+          <div class="footer-col">
+            <h5>Core Integrations</h5>
+            <ul>
+              <li>Qloo Taste Intelligence</li>
+              <li>Groq GPT-OSS-20B Reasoning</li>
+              <li>Geoapify Geospatial Places</li>
+              <li>Client Storage & Session State</li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h5>Technology Stack</h5>
+            <ul>
+              <li>FastAPI & Python 3</li>
+              <li>Pydantic Schemas</li>
+              <li>Vanilla HTML5 & CSS3</li>
+              <li>Vanilla JavaScript</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <span>© 2026 VibeTrip Agent. Built for Qloo Hackathon.</span>
+        <span>Honest provenance • No fabricated venues</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js?v=3.4"></script>
+  <script src="js/app.js?v=3.4"></script>
+  <script src="js/results.js?v=3.4"></script>
+  <script src="js/planner.js?v=3.4"></script>
+</body>
+</html>

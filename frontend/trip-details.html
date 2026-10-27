@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trip Details - VibeTrip Agent</title>
+  
+  <link rel="stylesheet" href="css/styles.css?v=2.2">
+  <link rel="stylesheet" href="css/components.css?v=2.2">
+  <link rel="stylesheet" href="css/responsive.css?v=2.2">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <header class="navbar navbar-results">
+    <div class="container nav-container">
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html" class="nav-link">Explore</a></li>
+        <li><a href="trips.html" class="nav-link active">My Trips</a></li>
+        <li><a href="index.html#plannerSection" class="nav-link">Plan Trip</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Details Content -->
+  <main style="padding: 40px 0 80px; flex: 1;">
+    <div class="container">
+      <div style="margin-bottom: 24px;">
+        <a href="trips.html" class="btn btn-outline btn-sm">
+          ← Back to All Trips
+        </a>
+      </div>
+
+      <div id="resultsContainer">
+        <div style="text-align: center; padding: 60px;">
+          <div class="loading-spinner-ring" style="width: 48px; height: 48px; margin: 0 auto 16px; position: static;"></div>
+          <p style="color: var(--color-text-muted);">Loading itinerary details...</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bottom">
+        <span>© 2026 VibeTrip. Built for Qloo Hackathon.</span>
+        <a href="index.html">Return to Home</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/results.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const tripId = urlParams.get('id');
+      const container = document.getElementById('resultsContainer');
+
+      if (!tripId) {
+        container.innerHTML = `
+          <div class="card" style="text-align: center; padding: 48px;">
+            <h3>Trip Not Found</h3>
+            <p style="color: var(--color-text-muted); margin-bottom: 20px;">No trip ID was provided in the URL.</p>
+            <a href="trips.html" class="btn btn-primary btn-sm">Go to My Trips</a>
+          </div>
+        `;
+        return;
+      }
+
+      let plan = null;
+
+      try {
+        const local = JSON.parse(localStorage.getItem('vibetrip_guest_trips') || '[]');
+        const found = Array.isArray(local) ? local.find(t => t && t.id === tripId) : null;
+        if (found && found.plan) {
+          plan = found.plan;
+        }
+      } catch (e) {
+        console.warn('Error reading trip from localStorage:', e);
+      }
+
+      if (plan) {
+        window.results.renderPlan(plan);
+      } else {
+        container.innerHTML = `
+          <div class="card" style="text-align: center; padding: 48px;">
+            <h3>Trip Not Found</h3>
+            <p style="color: var(--color-text-muted); margin-bottom: 20px;">The requested trip could not be found or has expired.</p>
+            <a href="trips.html" class="btn btn-primary btn-sm">Back to Saved Trips</a>
+          </div>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>
