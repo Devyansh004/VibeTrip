@@ -295,8 +295,8 @@ class GroqService:
 
     @property
     def is_configured(self) -> bool:
-        """Check if Groq credentials are provided."""
-        return bool(self.api_key and self.api_key.strip())
+        """Check if Groq credentials are provided and valid."""
+        return self.settings.is_groq_configured
 
     def _get_client(self) -> AsyncOpenAI:
         """Get or initialize the Groq OpenAI-compatible client, reusing connection pool."""

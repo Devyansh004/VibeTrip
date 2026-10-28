@@ -107,6 +107,35 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize cached trip banner on load
   updateCachedTripBanner();
 
+  // Validate active cached itinerary against backend health
+  (async () => {
+    try {
+      if (window.api && typeof window.api.getHealth === 'function') {
+        const health = await window.api.getHealth();
+        if (health && health.integrations) {
+          const cached = getCurrentCachedItinerary();
+          if (cached && cached.plan && Array.isArray(cached.plan.warnings)) {
+            const hasStaleUnconfiguredWarning = cached.plan.warnings.some(w => {
+              const lower = w.toLowerCase();
+              return (
+                (lower.includes('qloo api is not configured') && health.integrations.qloo === 'configured') ||
+                (lower.includes('geoapify api is not configured') && health.integrations.geoapify === 'configured') ||
+                (lower.includes('groq api is not configured') && health.integrations.groq === 'configured')
+              );
+            });
+            if (hasStaleUnconfiguredWarning) {
+              console.info('Clearing stale degraded itinerary cache; integrations are now active.');
+              localStorage.removeItem(CURRENT_ITINERARY_KEY);
+              updateCachedTripBanner();
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.debug('Health check skipped on load:', err);
+    }
+  })();
+
   // Selected state arrays
   let selectedInterests = ['cafes', 'architecture', 'photography'];
   let selectedAtmosphere = ['artistic', 'peaceful'];
@@ -226,7 +255,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Smart Itinerary Re-use Check
     const cached = getCurrentCachedItinerary();
-    if (cached && cached.plan && areInputsMatching(payload, cached.inputs)) {
+    const hasUnconfiguredWarnings = cached?.plan?.warnings?.some(w => w.toLowerCase().includes('not configured'));
+    const isDegradedCache = hasUnconfiguredWarnings || Object.values(cached?.plan?.integration_status || {}).some(s => s === 'not_configured');
+
+    if (cached && cached.plan && areInputsMatching(payload, cached.inputs) && !isDegradedCache) {
       // Re-use current generated plan without calling backend or Groq API
       const resultsSection = document.getElementById('resultsSection');
       window.results.renderPlan(cached.plan);
@@ -366,7 +398,12 @@ async function executePlanningFlow(payload) {
       const icon = step2.querySelector('.step-status-icon');
       if (icon) icon.textContent = '—';
       const label = step2.querySelector('span:last-child');
-      if (label) label.textContent = 'Qloo insights (unconfigured / skipped)';
+      const qlooStatus = planData.integration_status?.qloo;
+      if (label) {
+        label.textContent = qlooStatus === 'not_configured'
+          ? 'Qloo insights (unconfigured / skipped)'
+          : 'Qloo insights (temporarily unavailable / skipped)';
+      }
     }
 
     if (planData.integration_status?.geoapify !== 'success' && step3) {
@@ -374,7 +411,12 @@ async function executePlanningFlow(payload) {
       const icon = step3.querySelector('.step-status-icon');
       if (icon) icon.textContent = '—';
       const label = step3.querySelector('span:last-child');
-      if (label) label.textContent = 'Geoapify places (unconfigured / skipped)';
+      const geoStatus = planData.integration_status?.geoapify;
+      if (label) {
+        label.textContent = geoStatus === 'not_configured'
+          ? 'Geoapify places (unconfigured / skipped)'
+          : 'Geoapify places (temporarily unavailable / skipped)';
+      }
     }
 
     const aiSuccess = planData.integration_status?.groq === 'success' || planData.integration_status?.gemini === 'success';
@@ -383,8 +425,14 @@ async function executePlanningFlow(payload) {
       const icon = step4.querySelector('.step-status-icon');
       if (icon) icon.textContent = '—';
       const label = step4.querySelector('span:last-child');
-      if (label) label.textContent = 'AI reasoning (unconfigured / rule fallback)';
+      const groqStatus = planData.integration_status?.groq;
+      if (label) {
+        label.textContent = groqStatus === 'not_configured'
+          ? 'AI reasoning (unconfigured / rule fallback)'
+          : 'AI reasoning (temporarily unavailable / rule fallback)';
+      }
     }
+
 
     setTimeout(() => {
       if (step5) {

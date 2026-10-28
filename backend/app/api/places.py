@@ -30,7 +30,13 @@ async def search_places(
     lon = request.longitude
 
     if (lat is None or lon is None) and request.location:
-        geocode_result = await geoapify.geocode_location(request.location)
+        clean_loc = request.location.strip()
+        if not clean_loc:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Either valid coordinates (latitude & longitude) or a searchable location string must be provided",
+            )
+        geocode_result = await geoapify.geocode_location(clean_loc)
         if geocode_result:
             lat = geocode_result["latitude"]
             lon = geocode_result["longitude"]
@@ -45,6 +51,7 @@ async def search_places(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Either valid coordinates (latitude & longitude) or a searchable location string must be provided",
         )
+
 
     categories = request.categories
     if not categories:

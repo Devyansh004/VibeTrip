@@ -37,8 +37,8 @@ class GeoapifyService:
 
     @property
     def is_configured(self) -> bool:
-        """Check if Geoapify credentials are provided."""
-        return bool(self.api_key and self.api_key.strip())
+        """Check if Geoapify credentials are provided and valid."""
+        return self.settings.is_geoapify_configured
 
     async def geocode_location(self, location: str) -> Optional[Dict[str, Any]]:
         """Geocode a location or city name into latitude and longitude coordinates."""

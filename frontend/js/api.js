@@ -2,9 +2,15 @@
  * VibeTrip Agent - Backend API Client
  */
 
-const API_BASE = window.location.origin.includes('5500') 
-  ? 'http://127.0.0.1:8000' 
-  : window.location.origin;
+const API_BASE = (() => {
+  const isDirectFastAPI = window.location.port === '8000';
+  if (isDirectFastAPI && window.location.origin && window.location.origin !== 'null') {
+    return window.location.origin;
+  }
+  // Default to local FastAPI backend when running via Live Server (e.g. 5500/5501) or other dev origins
+  return 'http://127.0.0.1:8000';
+})();
+
 
 class VibeTripAPI {
   constructor() {

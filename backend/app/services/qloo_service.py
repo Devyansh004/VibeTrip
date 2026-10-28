@@ -20,7 +20,7 @@ class QlooService:
     @property
     def is_configured(self) -> bool:
         """Check if service has valid API credentials."""
-        return bool(self.api_key and self.api_key.strip())
+        return self.settings.is_qloo_configured
 
     def _get_headers(self) -> Dict[str, str]:
         """Construct request headers with X-Api-Key."""

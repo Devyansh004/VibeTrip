@@ -20,7 +20,7 @@ from app.utils.logging import logger
 _itinerary_cache: Dict[str, TravelPlanResponse] = {}
 
 
-def _build_plan_cache_key(request: TravelPlanRequest) -> str:
+def _build_plan_cache_key(request: TravelPlanRequest, config_state: str = "") -> str:
     norm_dest = request.destination.strip().lower()
     days = request.duration_days or 3
     start = str(request.start_date) if request.start_date else ""
@@ -30,7 +30,7 @@ def _build_plan_cache_key(request: TravelPlanRequest) -> str:
     pace = (request.travel_pace or "balanced").lower()
     sorted_interests = ",".join(sorted([i.lower().strip() for i in request.interests]))
     sorted_atmosphere = ",".join(sorted([a.lower().strip() for a in request.atmosphere]))
-    return f"{norm_dest}:{days}:{start}:{end}:{travelers}:{budget}:{pace}:{sorted_interests}:{sorted_atmosphere}"
+    return f"{norm_dest}:{days}:{start}:{end}:{travelers}:{budget}:{pace}:{sorted_interests}:{sorted_atmosphere}:{config_state}"
 
 
 class TravelAgentOrchestrator:
@@ -61,10 +61,21 @@ class TravelAgentOrchestrator:
 
     async def plan_trip(self, request: TravelPlanRequest) -> TravelPlanResponse:
         """Execute the end-to-end travel planning orchestration workflow."""
-        cache_key = _build_plan_cache_key(request)
+        config_state = f"{self.qloo.is_configured}:{self.groq.is_configured}:{self.geoapify.is_configured}"
+        cache_key = _build_plan_cache_key(request, config_state)
         if cache_key in _itinerary_cache:
-            logger.info(f"Reusing cached itinerary for destination '{request.destination}'")
-            return _itinerary_cache[cache_key]
+            cached_plan = _itinerary_cache[cache_key]
+            # Verify cached plan does not contain stale unconfigured warnings if services are now configured
+            has_stale_warning = any(
+                ("qloo api is not configured" in w.lower() and self.qloo.is_configured) or
+                ("geoapify api is not configured" in w.lower() and self.geoapify.is_configured) or
+                ("groq api is not configured" in w.lower() and self.groq.is_configured)
+                for w in (cached_plan.warnings or [])
+            )
+            if not has_stale_warning:
+                logger.info(f"Reusing cached itinerary for destination '{request.destination}'")
+                return cached_plan
+
 
         trip_id = str(uuid.uuid4())
         warnings: List[str] = []
@@ -193,6 +204,9 @@ class TravelAgentOrchestrator:
                     budget=request.budget,
                 )
         else:
+            if not self.groq.is_configured:
+                integration_status["groq"] = "not_configured"
+                warnings.append("Groq API is not configured; assembled grounded rule-based itinerary.")
             # Deterministic fallback with verified places
             summary, itinerary_days, budget_breakdown = self.itinerary.build_grounded_itinerary_fallback(
                 destination=request.destination,
@@ -204,6 +218,7 @@ class TravelAgentOrchestrator:
                 currency=request.currency,
                 budget=request.budget,
             )
+
 
         # Step 7 & 8: Assemble final TravelPlanResponse
         response = TravelPlanResponse(
@@ -314,7 +329,26 @@ class TravelAgentOrchestrator:
             warnings.append("Groq API is not configured; natural language personalization could not be applied.")
             itinerary_days = base_plan.itinerary
 
-        all_warnings = list(dict.fromkeys(base_plan.warnings + warnings))
+        # Remove stale configuration warnings if the services are now configured
+        stale_prefixes = []
+        if self.qloo.is_configured:
+            stale_prefixes.append("qloo api is not configured")
+        if self.geoapify.is_configured:
+            stale_prefixes.append("geoapify api is not configured")
+        if self.groq.is_configured:
+            stale_prefixes.append("groq api is not configured")
+
+        cleaned_base_warnings = [
+            w for w in (base_plan.warnings or [])
+            if not any(w.lower().startswith(prefix) for prefix in stale_prefixes)
+        ]
+        all_warnings = list(dict.fromkeys(cleaned_base_warnings + warnings))
+
+        # Ensure integration_status accurately reflects current configuration for unconfigured services
+        if self.qloo.is_configured and integration_status.get("qloo") == "not_configured":
+            integration_status["qloo"] = "configured"
+        if self.geoapify.is_configured and integration_status.get("geoapify") == "not_configured":
+            integration_status["geoapify"] = "configured"
 
         return TravelPlanResponse(
             trip_id=base_plan.trip_id or str(uuid.uuid4()),
@@ -328,3 +362,4 @@ class TravelAgentOrchestrator:
             integration_status=integration_status,
             warnings=all_warnings,
         )
+

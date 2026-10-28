@@ -99,6 +99,11 @@ class ResultsRenderer {
           </div>
         </div>
 
+        <!-- Integration Status Banner -->
+        <div id="integrationStatusContainer">
+          ${this.renderIntegrationStatusBanner(integration_status)}
+        </div>
+
         <!-- Warnings Banner -->
         <div id="overviewWarningsContainer">
           ${this.renderWarningsHtml(warnings)}
@@ -343,6 +348,43 @@ class ResultsRenderer {
       <button type="button" class="btn btn-outline btn-sm" id="resetPlaceSelectionsBtn" style="font-size: 0.75rem; padding: 4px 10px;">
         Reset Selections
       </button>
+    `;
+  }
+
+  /**
+   * Render integration status banner HTML
+   */
+  renderIntegrationStatusBanner(integration_status) {
+    if (!integration_status) return '';
+    const qloo = integration_status.qloo || 'not_configured';
+    const geo = integration_status.geoapify || 'not_configured';
+    const groq = integration_status.groq || 'not_configured';
+
+    const getPillClass = (st) => (st === 'success' ? 'success' : st === 'not_configured' ? 'not_configured' : 'failed');
+    const getPillLabel = (st) => {
+      if (st === 'success') return '✓ Active';
+      if (st === 'not_configured') return '○ Unconfigured';
+      return '⚠ Fallback';
+    };
+
+    return `
+      <div class="integration-status-banner" id="integrationStatusBanner" style="margin-top: 14px; margin-bottom: 14px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <strong style="color: var(--color-text);">Service Integrations:</strong>
+          <span style="color: var(--color-text-muted); font-size: 0.8rem;">Live execution provenance</span>
+        </div>
+        <div class="integration-pills">
+          <span class="integration-pill ${getPillClass(qloo)}">
+            Qloo Taste: ${getPillLabel(qloo)}
+          </span>
+          <span class="integration-pill ${getPillClass(geo)}">
+            Geoapify Places: ${getPillLabel(geo)}
+          </span>
+          <span class="integration-pill ${getPillClass(groq)}">
+            Groq AI: ${getPillLabel(groq)}
+          </span>
+        </div>
+      </div>
     `;
   }
 
@@ -834,6 +876,12 @@ class ResultsRenderer {
       const budgetContainer = document.getElementById('budgetCardContainer');
       if (budgetContainer) {
         budgetContainer.innerHTML = updatedPlan.estimated_budget ? this.renderBudgetCard(updatedPlan.estimated_budget) : '';
+      }
+
+      // Update integration status banner honestly
+      const bannerContainer = document.getElementById('integrationStatusContainer');
+      if (bannerContainer) {
+        bannerContainer.innerHTML = this.renderIntegrationStatusBanner(updatedPlan.integration_status);
       }
 
       // Update warnings banner honestly
