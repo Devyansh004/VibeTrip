@@ -9,9 +9,6 @@
 
 **VibeTrip Agent** is an intelligent travel discovery web application that transcends conventional tourist booking engines. Instead of directing travelers toward cookie-cutter top attractions, VibeTrip interprets a user's personality, aesthetic preferences, travel mood, and cultural affinities to curate hidden gems and personalized day-by-day itineraries that truly match their personal vibe.
 
-### Real-World Example
-> *"I'm visiting Jaipur for 2 days. I love indie music, artistic cafes, vintage architecture, street photography, and peaceful places. My budget is ₹5,000."*
-
 VibeTrip orchestrates:
 1. **Preference Extraction**: Parses natural-language vibe prompts into structured aesthetic and atmospheric signals.
 2. **Qloo Taste Intelligence**: Queries cultural affinity signals and taste correlations via `/v2/insights`.
