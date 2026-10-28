@@ -4,11 +4,13 @@
 
 const API_BASE = (() => {
   const isDirectFastAPI = window.location.port === '8000';
+
   if (isDirectFastAPI && window.location.origin && window.location.origin !== 'null') {
     return window.location.origin;
   }
-  // Default to local FastAPI backend when running via Live Server (e.g. 5500/5501) or other dev origins
-  return 'http://127.0.0.1:8000';
+
+  // Use deployed Render backend for the Vercel frontend
+  return 'https://vibetrip-0o8v.onrender.com';
 })();
 
 
